@@ -66,6 +66,7 @@ public class JConstants {
     public static final String LOCAL_NOTIFICATION_EVENT = "LocalNotificationEvent";
     public static final String TAG_ALIAS_EVENT = "TagAliasEvent";
     public static final String MOBILE_NUMBER_EVENT = "MobileNumberEvent";
+    public static final String NOTIFY_BUTTON_CLICK_EVENT = "NotifyButtonClickEvent";
     public static final String COMMAND_EVENT = "CommandEvent";
     public static final String BADGE_NUMBER = "badge";
     public static final String PROPERTIES = "pros";

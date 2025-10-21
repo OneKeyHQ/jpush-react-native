@@ -11,6 +11,7 @@ const ConnectEvent           = 'ConnectEvent'            //连接状态
 const NotificationEvent      = 'NotificationEvent'       //通知事件
 const LocalNotificationEvent = 'LocalNotificationEvent'  //本地通知事件
 const CustomMessageEvent     = 'CustomMessageEvent'      //自定义消息事件
+const NotifyButtonClickEvent = 'NotifyButtonClickEvent'  //通知按钮点击事件
 const InappMessageEvent      = 'InappMessageEvent'       //应用内消息事件
 const TagAliasEvent          = 'TagAliasEvent'           //TagAlias/Pros事件
 const MobileNumberEvent      = 'MobileNumberEvent'       //电话号码事件
@@ -516,6 +517,31 @@ export default class JPush {
     }
 
     /*
+    * 通知按钮点击事件, Android Only
+    *
+    * @param {Function} callback = (result) => {"msgId":String，"platform":number, "name":string, "actionType":number, "action":string, "data":string}}}
+    *
+    * msgId:唯一标识通知按钮点击的 ID
+    *
+    * platform:平台
+    * 
+    * name:按钮名称
+    *
+    * actionType:按钮动作类型
+    *
+    * action:按钮动作
+    *
+    * data:按钮数据
+    *
+    * */
+    static addNotifyButtonClickListener(callback) {
+        listeners[callback] = DeviceEventEmitter.addListener(
+            NotifyButtonClickEvent, result => {
+                callback(result)
+            })
+    }
+
+    /*
     * 应用内消息事件
     *
     * @param {Function} callback = (result) => {"mesageId":String，"title":String, "content":String, "target":String, "clickAction":String, extras":{String:String}}}
@@ -750,6 +776,19 @@ export default class JPush {
          }else if (Platform.OS == "android") {
              JPushModule.setCollectControl(params)
          }
+    }
+
+    /*
+    * 设置进入后台是否允许长连接
+    * 支持版本：v5.9.0 版本开始
+    * 功能说明：设置进入后台是否允许长连接。默认是NO,进入后台会关闭长连接，回到前台会重新接入。请在初始化函数之前调用。
+    * @param enable = boolean
+    * @platform iOS
+    * */
+    static setBackgroundEnable(enable) {
+        if (Platform.OS == "ios") {
+            JPushModule.setBackgroundEnable(enable)
+        }
     }
 
 }

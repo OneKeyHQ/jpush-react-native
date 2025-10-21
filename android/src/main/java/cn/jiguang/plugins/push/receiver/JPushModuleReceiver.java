@@ -14,6 +14,7 @@ import cn.jpush.android.api.CustomMessage;
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.api.NotificationMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
+import cn.jpush.android.api.NotificationCustomButton;
 
 public class JPushModuleReceiver extends JPushMessageReceiver {
 
@@ -80,6 +81,13 @@ public class JPushModuleReceiver extends JPushMessageReceiver {
     WritableMap writableMap = JPushHelper.convertNotificationToMap(JConstants.NOTIFICATION_DISMISSED, notificationMessage);
     JPushHelper.sendEvent(JConstants.NOTIFICATION_EVENT, writableMap);
   }
+
+  @Override
+  public void onNotifyButtonClick(Context context, NotificationCustomButton notificationCustomButton) {
+    JLogger.d("onNotifyButtonClick:" + notificationCustomButton.toString());
+    WritableMap writableMap = JPushHelper.convertNotificationCustomButtonToMap(notificationCustomButton);
+    JPushHelper.sendEvent(JConstants.NOTIFY_BUTTON_CLICK_EVENT, writableMap);
+ }
 
   @Override
   public void onRegister(Context context, String registrationId) {

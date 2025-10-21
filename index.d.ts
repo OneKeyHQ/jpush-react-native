@@ -315,6 +315,36 @@ export default class JPush {
     }>
   ): void;
 
+  // 通知按钮点击事件, Android Only
+  static addNotifyButtonClickListener(
+    callback: Callback<{
+      /**
+       * 唯一标识通知按钮点击的 ID
+       */
+      msgId: string;
+      /**
+       * 平台
+       */
+      platform: number;
+      /**
+       * 按钮名称
+       */
+      name: string;
+      /**
+       * 按钮动作类型
+       */
+      actionType: number;
+      /**
+       * 按钮动作
+       */
+      action: string;
+      /**
+       * 按钮数据
+       */
+      data: string;
+    }>
+  ): void;
+
   /**
    * inapp消息事件
    */
@@ -546,5 +576,14 @@ export default class JPush {
   mac: boolean;
   wifi: boolean;
 }): void;
+
+/**
+   * 设置进入后台是否允许长连接
+   * 支持版本：v5.9.0 版本开始
+   * 功能说明：设置进入后台是否允许长连接。默认是NO,进入后台会关闭长连接，回到前台会重新接入。请在初始化函数之前调用。
+   *
+   * @platform iOS
+   */
+ static setBackgroundEnable(enable: boolean): void;
 
 }

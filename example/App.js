@@ -52,6 +52,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    // JPush.setBackgroundEnable(true);
     JPush.init({"appKey":"4fcc3e237eec4c4fb804ad49","channel":"dev","production":1});
     //连接状态
     this.connectListener = result => {
@@ -74,6 +75,11 @@ export default class App extends React.Component {
     console.log("customMessageListener:" + JSON.stringify(result))
   };
     JPush.addCustomMessageListener(this.customMessageListener);
+    //通知按钮点击回调
+    this.notifyButtonClickListener = result => {
+    console.log("notifyButtonClickListener:" + JSON.stringify(result))
+  };
+    JPush.addNotifyButtonClickListener(this.notifyButtonClickListener);
     //应用内消息回调
     JPush.pageEnterTo("HomePage") // 进入首页，当页面退出时请调用 JPush.pageLeave('HomePage')
     this.inappMessageListener = result => {

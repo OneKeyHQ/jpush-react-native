@@ -383,6 +383,11 @@ RCT_EXPORT_METHOD(setSmartPushEnable:(BOOL )enable)
     [JPUSHService setSmartPushEnable:enable];
 }
 
+RCT_EXPORT_METHOD(setBackgroundEnable:(BOOL )enable)
+{
+    [JPUSHService setBackgroundEnable:enable];
+}
+
 
 //应用内消息 代理
 - (void)jPushInAppMessageDidShow:(JPushInAppMessage *)inAppMessage {
