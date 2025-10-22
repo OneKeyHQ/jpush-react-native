@@ -62,7 +62,7 @@ export default class JPush {
    */
   static init(params: {
     appKey: string;
-    titchannelle: string;
+    channel: string;
     production: boolean;
   }): void;
 
@@ -125,6 +125,16 @@ export default class JPush {
    * 查询别名
    */
   static queryAlias(params: Sequence): void;
+
+   /**
+   * 进入页面
+   */
+  static pageEnterTo(params: String): void;
+
+  /**
+   * 离开页面
+   */
+  static pageLeave(params: String): void;
 
   //***************************************统计***************************************
 
@@ -288,7 +298,7 @@ export default class JPush {
   /**
    * 自定义消息事件
    */
-  static addCustomMessagegListener(
+  static addCustomMessageListener(
     callback: Callback<{
       /**
        * 唯一标识自定义消息的 ID
@@ -305,6 +315,94 @@ export default class JPush {
     }>
   ): void;
 
+  // 通知按钮点击事件, Android Only
+  static addNotifyButtonClickListener(
+    callback: Callback<{
+      /**
+       * 唯一标识通知按钮点击的 ID
+       */
+      msgId: string;
+      /**
+       * 平台
+       */
+      platform: number;
+      /**
+       * 按钮名称
+       */
+      name: string;
+      /**
+       * 按钮动作类型
+       */
+      actionType: number;
+      /**
+       * 按钮动作
+       */
+      action: string;
+      /**
+       * 按钮数据
+       */
+      data: string;
+    }>
+  ): void;
+
+  /**
+   * inapp消息事件
+   */
+  static addInappMessageListener(
+    callback: Callback<{
+      /**
+       * 唯一标识inapp消息的 ID
+       */
+      mesageId: string;
+      /**
+       * 标题
+       */
+      title: string;
+      /**
+       * 内容
+       */
+      content: string;
+      /**
+       * 目标页面
+       */
+      target: string[];
+      /**
+       * 跳转地址
+       */
+      clickAction: string;
+      /**
+       * 附加字段
+       */
+      extras: Extra;
+      /**
+       * 类型，inappShow：展示，inappClick：点击
+       */
+      inappEventType: "inappShow" | "inappClick";
+    }>
+  ): void;
+  static addCommandEventListener(
+            callback: Callback<{
+                /**
+                 * 命令类型（例如：1, 2, 3 等）
+                 */
+                command: number;
+
+                /**
+                 * 命令的附加信息（例如：JSON 字符串或其他数据）
+                 */
+                commandExtra: string;
+
+                /**
+                 * 命令的消息内容
+                 */
+                commandMessage: string;
+
+                /**
+                 * 命令的执行结果（例如：0 表示成功，其他值表示错误码）
+                 */
+                commandResult: number;
+            }>
+        ): void;
   /**
    * tag alias事件
    */
@@ -447,4 +545,45 @@ export default class JPush {
      */
     appBadge: number;
   }): void;
+
+ /**
+   * 设置用户分群推送功能开关
+   *
+   * 
+   * @param {boolean} enable,  YES:开启，NO:关闭，默认是开启。
+   *
+   */
+ static setSmartPushEnable(enable: boolean): void;
+
+  /**
+   * 设置应用数据洞察
+   *
+   * 
+   * @param {boolean} enable,  YES:开启，NO:关闭，默认是开启。
+   *
+   */
+  static setDataInsightsEnable(enable: boolean): void;
+
+/**
+   * 数据采集控制, YES:开启，NO:关闭, 默认开启
+   *
+   */
+ static setCollectControl(params: {
+  cell: boolean;
+  bssid: boolean;
+  imei: boolean;
+  imsi: boolean;
+  mac: boolean;
+  wifi: boolean;
+}): void;
+
+/**
+   * 设置进入后台是否允许长连接
+   * 支持版本：v5.9.0 版本开始
+   * 功能说明：设置进入后台是否允许长连接。默认是NO,进入后台会关闭长连接，回到前台会重新接入。请在初始化函数之前调用。
+   *
+   * @platform iOS
+   */
+ static setBackgroundEnable(enable: boolean): void;
+
 }

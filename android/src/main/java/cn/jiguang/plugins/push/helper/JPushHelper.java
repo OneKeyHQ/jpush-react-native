@@ -21,6 +21,7 @@ import cn.jiguang.plugins.push.common.JLogger;
 import cn.jpush.android.api.CustomMessage;
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.api.NotificationMessage;
+import cn.jpush.android.api.NotificationCustomButton;
 
 public class JPushHelper {
 
@@ -41,6 +42,17 @@ public class JPushHelper {
         convertExtras(message.notificationExtras, writableMap);
         return writableMap;
     }
+    public static WritableMap convertInAppMessageToMap(String eventType, NotificationMessage message) {
+        WritableMap writableMap = Arguments.createMap();
+        writableMap.putString(JConstants.INAPP_MESSAGE_EVENT, eventType);
+        writableMap.putString(JConstants.MESSAGE_ID, message.msgId);
+        writableMap.putString(JConstants.TITLE, message.inAppMsgTitle);
+        writableMap.putString(JConstants.CONTENT, message.inAppMsgContentBody);
+        writableMap.putString(JConstants.INAPPCLICKACTION, message.inAppClickAction);
+        writableMap.putString(JConstants.INAPPEXTRAS, message.inAppExtras);
+        writableMap.putString(JConstants.INAPPSHOWTARGET, message.inAppShowTarget);
+        return writableMap;
+    }
 
     public static WritableMap convertNotificationBundleToMap(String eventType, Bundle bundle) {
         WritableMap writableMap = Arguments.createMap();
@@ -59,6 +71,22 @@ public class JPushHelper {
         writableMap.putString(JConstants.CONTENT, customMessage.message);
         convertExtras(customMessage.extra, writableMap);
         return writableMap;
+    }
+
+    public static WritableMap convertNotificationCustomButtonToMap(NotificationCustomButton notificationCustomButton) {
+        WritableMap writableMap = Arguments.createMap();
+        try {
+            writableMap.putString("msgId", notificationCustomButton.a);
+            writableMap.putInt("platform", notificationCustomButton.b);
+            writableMap.putString("name", notificationCustomButton.c);
+            writableMap.putInt("actionType", notificationCustomButton.d);
+            writableMap.putString("action", notificationCustomButton.e);
+            writableMap.putString("data", notificationCustomButton.f);
+            return writableMap;
+         } catch (Throwable throwable) {
+            JLogger.w("convertNotificationCustomButtonToMap error:" + throwable.getMessage());
+            return writableMap;
+        }
     }
 
     public static WritableMap convertJPushMessageToMap(int type, JPushMessage message) {
