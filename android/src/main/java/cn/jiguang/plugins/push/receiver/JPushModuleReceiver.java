@@ -14,6 +14,7 @@ import cn.jpush.android.api.CustomMessage;
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.api.NotificationMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
+import cn.jpush.android.api.NotificationCustomButton;
 
 public class JPushModuleReceiver extends JPushMessageReceiver {
 
@@ -34,7 +35,12 @@ public class JPushModuleReceiver extends JPushMessageReceiver {
       JPushHelper.sendEvent(JConstants.LOCAL_NOTIFICATION_EVENT, writableMap);
     }
   }
-
+  @Override
+  public void onPropertyOperatorResult(Context context, JPushMessage jPushMessage) {
+    JLogger.d("onPropertyOperatorResult:" + jPushMessage.toString());
+    WritableMap writableMap = JPushHelper.convertJPushMessageToMap(1, jPushMessage);
+    JPushHelper.sendEvent(JConstants.TAG_ALIAS_EVENT, writableMap);
+  }
   @Override
   public void onNotifyMessageOpened(Context context, NotificationMessage notificationMessage) {
     JLogger.d("onNotifyMessageOpened:" + notificationMessage.toString());
@@ -46,6 +52,28 @@ public class JPushModuleReceiver extends JPushMessageReceiver {
       super.onNotifyMessageOpened(context, notificationMessage);
     }
   }
+  @Override
+  public void onInAppMessageShow(Context context, NotificationMessage notificationMessage) {
+    JLogger.d("onInAppMessageShow:" + notificationMessage.toString());
+    if (JPushModule.reactContext != null) {
+      if (!JPushModule.isAppForeground) JPushHelper.launchApp(context);
+      WritableMap writableMap = JPushHelper.convertInAppMessageToMap(JConstants.IN_APP_MESSAGE_SHOW, notificationMessage);
+      JPushHelper.sendEvent(JConstants.INAPP_MESSAGE_EVENT, writableMap);
+    } else {
+      super.onInAppMessageShow(context, notificationMessage);
+    }
+  }
+  @Override
+  public void onInAppMessageClick(Context context, NotificationMessage notificationMessage) {
+    JLogger.d("onInAppMessageClick:" + notificationMessage.toString());
+    if (JPushModule.reactContext != null) {
+      if (!JPushModule.isAppForeground) JPushHelper.launchApp(context);
+      WritableMap writableMap = JPushHelper.convertInAppMessageToMap(JConstants.IN_APP_MESSAGE_CLICK, notificationMessage);
+      JPushHelper.sendEvent(JConstants.INAPP_MESSAGE_EVENT, writableMap);
+    } else {
+      super.onInAppMessageClick(context, notificationMessage);
+    }
+  }
 
   @Override
   public void onNotifyMessageDismiss(Context context, NotificationMessage notificationMessage) {
@@ -53,6 +81,13 @@ public class JPushModuleReceiver extends JPushMessageReceiver {
     WritableMap writableMap = JPushHelper.convertNotificationToMap(JConstants.NOTIFICATION_DISMISSED, notificationMessage);
     JPushHelper.sendEvent(JConstants.NOTIFICATION_EVENT, writableMap);
   }
+
+  @Override
+  public void onNotifyButtonClick(Context context, NotificationCustomButton notificationCustomButton) {
+    JLogger.d("onNotifyButtonClick:" + notificationCustomButton.toString());
+    WritableMap writableMap = JPushHelper.convertNotificationCustomButtonToMap(notificationCustomButton);
+    JPushHelper.sendEvent(JConstants.NOTIFY_BUTTON_CLICK_EVENT, writableMap);
+ }
 
   @Override
   public void onRegister(Context context, String registrationId) {
